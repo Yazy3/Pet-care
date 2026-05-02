@@ -8,7 +8,7 @@ require_once __DIR__ . '/../models/Staff.php';
 require_once __DIR__ . '/../core/Flash.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
 
-class RecordController
+class RecordsController
 {
     private Record $record;
     private Pet $pet;
@@ -27,7 +27,7 @@ class RecordController
     public function index()
     {
         $records = $this->record->all();
-        require __DIR__ . '/../views/records/index.php';
+        require __DIR__ . '/../views/admin/records/index.php';
     }
 
     public function schedule()
@@ -90,7 +90,7 @@ class RecordController
     {
         $record = $this->record->find($id);
         $pets = $this->pet->allForDropdown();
-        $vaccines = $this->vaccine->allForDropdown();
+        $vaccine = $this->vaccine->allForDropdown();
         $staffs = $this->staff->allForDropdown();
         if (!$record) {
             Flash::set('error', 'Record not found.');

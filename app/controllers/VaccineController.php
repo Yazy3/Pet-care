@@ -18,23 +18,28 @@ class VaccineController
     public function index()
     {
         $vaccines = $this->vaccine->all();
-        require __DIR__ . '/../views/vaccines/index.php';
+        require __DIR__ . '/../views/admin/vaccine/index.php';
     }
 
     public function create()
     {
-        require __DIR__ . '/../views/vaccines/create.php';
+        require __DIR__ . '/../views/admin/vaccine/create.php';
     }
 
     public function store()
     {
-        $name = trim((string)($_POST['vaccine_name'] ?? ''));
-        $form = trim((string)($_POST['vaccine_form'] ?? ''));
+        $name = trim((string) ($_POST['vaccine_name'] ?? ''));
+        $form = trim((string) ($_POST['vaccine_form'] ?? ''));
 
-        if ($name === '') Flash::set('error', 'Vaccine name is required.');
-        if ($form === '') Flash::set('error', 'Vaccine form is required.');
+        if ($name === '')
+            Flash::set('error', 'Vaccine name is required.');
+        if ($form === '')
+            Flash::set('error', 'Vaccine form is required.');
 
-        if (Flash::has('error')) { header("Location: ?controller=vaccine&action=create"); exit; }
+        if (Flash::has('error')) {
+            header("Location: ?controller=vaccine&action=create");
+            exit;
+        }
 
         $this->vaccine->create($name, $form);
         Flash::set('success', "Vaccine '{$name}' added.");
@@ -45,18 +50,26 @@ class VaccineController
     public function edit(int $id)
     {
         $vaccine = $this->vaccine->find($id);
-        if (!$vaccine) { Flash::set('error','Vaccine not found.'); header("Location: ?controller=vaccine&action=index"); exit; }
+        if (!$vaccine) {
+            Flash::set('error', 'Vaccine not found.');
+            header("Location: ?controller=vaccine&action=index");
+            exit;
+        }
         require __DIR__ . '/../views/vaccines/edit.php';
     }
 
     public function update(int $id)
     {
-        $name = trim((string)($_POST['vaccine_name'] ?? ''));
-        $form = trim((string)($_POST['vaccine_form'] ?? ''));
+        $name = trim((string) ($_POST['vaccine_name'] ?? ''));
+        $form = trim((string) ($_POST['vaccine_form'] ?? ''));
 
-        if ($name === '') Flash::set('error', 'Vaccine name is required.');
+        if ($name === '')
+            Flash::set('error', 'Vaccine name is required.');
 
-        if (Flash::has('error')) { header("Location: ?controller=vaccine&action=edit&id={$id}"); exit; }
+        if (Flash::has('error')) {
+            header("Location: ?controller=vaccine&action=edit&id={$id}");
+            exit;
+        }
 
         $this->vaccine->update($id, $name, $form);
         Flash::set('success', "Vaccine updated.");

@@ -47,7 +47,6 @@ class RecordsController
 
     public function store()
     {
-
         $petId = (int) ($_POST['pet_id'] ?? 0);
         $vaccineId = (int) ($_POST['vaccine_id'] ?? 0);
         $dateAdminister = trim((string) ($_POST['date_administer'] ?? ''));
@@ -84,7 +83,7 @@ class RecordsController
             header("Location: ?controller=records&action=index");
             exit;
         }
-        require __DIR__ . '/../../views/records/show.php';
+        require __DIR__ . '/../views/admin/records/show.php';   // Fixed path
     }
 
     public function edit(int $id)
@@ -99,7 +98,8 @@ class RecordsController
             header("Location: ?controller=records&action=index");
             exit;
         }
-        require __DIR__ . '/../../views/records/edit.php';
+
+        require __DIR__ . '/../views/admin/records/edit.php';   // Fixed path
     }
 
     public function update(int $id)
@@ -125,6 +125,7 @@ class RecordsController
         }
 
         $this->record->update($id, $petId, $vaccineId, $dateAdminister, $dosage, $nextDose, $staffId, $dateUpdated);
+
         Flash::set('success', 'Record updated successfully.');
         header("Location: ?controller=records&action=index");
         exit;

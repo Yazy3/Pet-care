@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../models/Pet.php';
 require_once __DIR__ . '/../models/Owner.php';
-require_once __DIR__ . '/../models/Record.php';
+require_once __DIR__ . '/../models/Records.php';
 require_once __DIR__ . '/../core/Flash.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
 

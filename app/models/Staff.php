@@ -74,6 +74,17 @@ class Staff
         $stmt = $this->db->prepare("DELETE FROM staff_table WHERE staff_id = ?");
         return $stmt->execute([$id]);
     }
+    public function allForDropdown(): array
+    {
+        return $this->db->query("
+            SELECT 
+                staff_id,
+                staff_name 
+            FROM staff_table 
+            ORDER BY staff_name ASC
+        ")->fetchAll(PDO::FETCH_ASSOC) ?? [];
+    }
+
 
 
 

@@ -105,4 +105,18 @@ class Pet
     {
         return (int) $this->db->query("SELECT COUNT(*) FROM pet_table")->fetchColumn();
     }
+    public function allForDropdown(): array
+    {
+        return $this->db->query("
+            SELECT 
+                p.pet_id,
+                CONCAT(p.pet_name, ' (', 
+                       COALESCE(CONCAT(o.owner_first_name, ' ', o.owner_last_name), 'No Owner'), 
+                       ')') AS label
+            FROM pet_table p
+            LEFT JOIN owner_table o ON p.owner_id = o.owner_id
+            ORDER BY p.pet_name ASC
+        ")->fetchAll(PDO::FETCH_ASSOC) ?? [];
+    }
+
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../models/Record.php';
+require_once __DIR__ . '/../models/Records.php';
 require_once __DIR__ . '/../models/Pet.php';
 require_once __DIR__ . '/../models/Vaccine.php';
 require_once __DIR__ . '/../models/Staff.php';
@@ -34,7 +34,7 @@ class RecordsController
     {
         $dueSoon = $this->record->dueSoon(30);
         $overdue = $this->record->overdue();
-        require __DIR__ . '/../views/records/schedule.php';
+        require __DIR__ . '/../views/admin/records/schedule.php';
     }
 
     public function create()
@@ -42,11 +42,12 @@ class RecordsController
         $pets = $this->pet->allForDropdown();
         $vaccines = $this->vaccine->allForDropdown();
         $staffs = $this->staff->allForDropdown();
-        require __DIR__ . '/../views/records/create.php';
+        require __DIR__ . '/../views/admin/records/create.php';
     }
 
     public function store()
     {
+
         $petId = (int) ($_POST['pet_id'] ?? 0);
         $vaccineId = (int) ($_POST['vaccine_id'] ?? 0);
         $dateAdminister = trim((string) ($_POST['date_administer'] ?? ''));
@@ -65,13 +66,13 @@ class RecordsController
             Flash::set('error', 'Please select a staff member.');
 
         if (Flash::has('error')) {
-            header("Location: ?controller=record&action=create");
+            header("Location: ?controller=records&action=create");
             exit;
         }
 
         $this->record->create($petId, $vaccineId, $dateAdminister, $dosage, $nextDose, $staffId, $dateUpdated);
         Flash::set('success', 'Vaccination record saved successfully.');
-        header("Location: ?controller=record&action=index");
+        header("Location: ?controller=records&action=index");
         exit;
     }
 
@@ -80,24 +81,25 @@ class RecordsController
         $record = $this->record->find($id);
         if (!$record) {
             Flash::set('error', 'Record not found.');
-            header("Location: ?controller=record&action=index");
+            header("Location: ?controller=records&action=index");
             exit;
         }
-        require __DIR__ . '/../views/records/show.php';
+        require __DIR__ . '/../../views/records/show.php';
     }
 
     public function edit(int $id)
     {
         $record = $this->record->find($id);
         $pets = $this->pet->allForDropdown();
-        $vaccine = $this->vaccine->allForDropdown();
+        $vaccines = $this->vaccine->allForDropdown();
         $staffs = $this->staff->allForDropdown();
+
         if (!$record) {
             Flash::set('error', 'Record not found.');
-            header("Location: ?controller=record&action=index");
+            header("Location: ?controller=records&action=index");
             exit;
         }
-        require __DIR__ . '/../views/records/edit.php';
+        require __DIR__ . '/../../views/records/edit.php';
     }
 
     public function update(int $id)
@@ -118,13 +120,13 @@ class RecordsController
             Flash::set('error', 'Please select a staff member.');
 
         if (Flash::has('error')) {
-            header("Location: ?controller=record&action=edit&id={$id}");
+            header("Location: ?controller=records&action=edit&id={$id}");
             exit;
         }
 
         $this->record->update($id, $petId, $vaccineId, $dateAdminister, $dosage, $nextDose, $staffId, $dateUpdated);
         Flash::set('success', 'Record updated successfully.');
-        header("Location: ?controller=record&action=index");
+        header("Location: ?controller=records&action=index");
         exit;
     }
 
@@ -132,7 +134,7 @@ class RecordsController
     {
         $this->record->delete($id);
         Flash::set('success', 'Record deleted.');
-        header("Location: ?controller=record&action=index");
+        header("Location: ?controller=records&action=index");
         exit;
     }
 }

@@ -29,19 +29,22 @@ class VaccineController
     public function store()
     {
         $name = trim((string) ($_POST['vaccine_name'] ?? ''));
+        $type = trim((string) ($_POST['vaccine_type'] ?? ''));
         $form = trim((string) ($_POST['vaccine_form'] ?? ''));
 
-        if ($name === '')
+        if ($name === '') {
             Flash::set('error', 'Vaccine name is required.');
-        if ($form === '')
-            Flash::set('error', 'Vaccine form is required.');
+        }
+        if ($type === '') {
+            Flash::set('error', 'Vaccine type is required.');
+        }
 
         if (Flash::has('error')) {
             header("Location: ?controller=vaccine&action=create");
             exit;
         }
 
-        $this->vaccine->create($name, $form);
+        $this->vaccine->create($name, $type, $form);
         Flash::set('success', "Vaccine '{$name}' added.");
         header("Location: ?controller=vaccine&action=index");
         exit;
@@ -55,23 +58,28 @@ class VaccineController
             header("Location: ?controller=vaccine&action=index");
             exit;
         }
-        require __DIR__ . '/../views/vaccines/edit.php';
+        require __DIR__ . '/../views/admin/vaccine/edit.php';
     }
 
     public function update(int $id)
     {
         $name = trim((string) ($_POST['vaccine_name'] ?? ''));
+        $type = trim((string) ($_POST['vaccine_type'] ?? ''));
         $form = trim((string) ($_POST['vaccine_form'] ?? ''));
 
-        if ($name === '')
+        if ($name === '') {
             Flash::set('error', 'Vaccine name is required.');
+        }
+        if ($type === '') {
+            Flash::set('error', 'Vaccine type is required.');
+        }
 
         if (Flash::has('error')) {
             header("Location: ?controller=vaccine&action=edit&id={$id}");
             exit;
         }
 
-        $this->vaccine->update($id, $name, $form);
+        $this->vaccine->update($id, $name, $type, $form);
         Flash::set('success', "Vaccine updated.");
         header("Location: ?controller=vaccine&action=index");
         exit;

@@ -25,7 +25,7 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
                     <td colspan="9" class="text-center text-muted py-4">No records yet.</td>
                 </tr>
                 <?php else:
-          foreach ($records as $r): ?>
+                    foreach ($records as $r): ?>
                 <tr>
                     <td><?= $r['record_id'] ?></td>
                     <td>
@@ -49,6 +49,7 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
                     </td>
                     <td><?= htmlspecialchars($r['staff_name']) ?></td>
                     <td class="text-center">
+
                         <a href="?controller=record&action=show&id=<?= $r['record_id'] ?>"
                             class="btn btn-sm btn-outline-info    py-0"><i class="bi bi-eye"></i></a>
                         <a href="?controller=record&action=edit&id=<?= $r['record_id'] ?>"

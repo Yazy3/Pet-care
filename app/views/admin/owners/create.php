@@ -90,11 +90,11 @@ require __DIR__ . '/../../layouts/layout.php';
                         </div>
                     </div>
 
-                    <div class="d-flex gap-3 mt-5">
-                        <button type="submit" class="btn btn-success btn-lg px-5">
-                            <i class="bi bi-save-fill"></i> Save Owner & Pet
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-fill"></i> Save Owner & Pet
                         </button>
-                        <a href="?controller=owner&action=index" class="btn btn-secondary btn-lg px-5">
+                        <a href="?controller=owner&action=index" class="btn btn-outline-secondary">
                             Cancel
                         </a>
                     </div>

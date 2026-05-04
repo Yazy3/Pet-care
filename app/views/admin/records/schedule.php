@@ -1,6 +1,7 @@
-<?php $pageTitle = 'Vaccination Schedule';
-require __DIR__ . '/../../layouts/layout.php'; ?>
-
+<?php
+$pageTitle = 'Vaccination Schedule';
+require __DIR__ . '/../../layouts/layout.php';
+?>
 
 <?php if (!empty($overdue)): ?>
     <div class="alert alert-danger d-flex align-items-center gap-2 mb-3">
@@ -32,33 +33,34 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
                             <tr>
                                 <td colspan="4" class="text-center text-muted py-4">No overdue vaccinations. 🎉</td>
                             </tr>
-                        <?php else:
-                            foreach ($overdue as $r): ?>
+                        <?php else: ?>
+                            <?php foreach ($overdue as $r): ?>
                                 <tr>
                                     <td>
                                         <a href="?controller=pet&action=show&id=<?= $r['pet_id'] ?>"
                                             class="fw-semibold text-decoration-none">
-                                            <?= htmlspecialchars($r['pet_name']) ?>
+                                            <?= htmlspecialchars($r['pet_name'] ?? '') ?>
                                         </a>
-                                        <div><span class="badge badge-<?= $r['pet_species'] ?>"><?= $r['pet_species'] ?></span>
+                                        <div><span
+                                                class="badge badge-<?= htmlspecialchars($r['pet_species'] ?? '') ?>"><?= htmlspecialchars($r['pet_species'] ?? '') ?></span>
                                         </div>
                                     </td>
-                                    <td><?= htmlspecialchars($r['vaccine_name']) ?></td>
-                                    <td><span class="badge bg-danger"><?= htmlspecialchars($r['next_dose']) ?></span></td>
+                                    <td><?= htmlspecialchars($r['vaccine_name'] ?? '') ?></td>
+                                    <td><span class="badge bg-danger"><?= htmlspecialchars($r['next_dose'] ?? '') ?></span></td>
                                     <td><?= htmlspecialchars($r['owner_contact_no'] ?? '—') ?></td>
                                 </tr>
-                            <?php endforeach; endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-
     <div class="col-12 col-xl-6">
         <div class="panel">
             <div class="panel-hd">
-                <h6><i class="bi bi-bell-fill me-2 text-warning"></i>Due in Next 30 Days</h6>
+                <h6><i class="bi bi-bell-fill me-2 text-warning"></i>Due</h6>
                 <span class="badge bg-warning text-dark"><?= count($dueSoon) ?></span>
             </div>
             <div class="table-responsive">
@@ -76,23 +78,26 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
                             <tr>
                                 <td colspan="4" class="text-center text-muted py-4">No upcoming vaccinations.</td>
                             </tr>
-                        <?php else:
-                            foreach ($dueSoon as $r): ?>
+                        <?php else: ?>
+                            <?php foreach ($dueSoon as $r): ?>
                                 <tr>
                                     <td>
                                         <a href="?controller=pet&action=show&id=<?= $r['pet_id'] ?>"
                                             class="fw-semibold text-decoration-none">
-                                            <?= htmlspecialchars($r['pet_name']) ?>
+                                            <?= htmlspecialchars($r['pet_name'] ?? '') ?>
                                         </a>
-                                        <div><span class="badge badge-<?= $r['pet_species'] ?>"><?= $r['pet_species'] ?></span>
+                                        <div><span
+                                                class="badge badge-<?= htmlspecialchars($r['pet_species'] ?? '') ?>"><?= htmlspecialchars($r['pet_species'] ?? '') ?></span>
                                         </div>
                                     </td>
-                                    <td><?= htmlspecialchars($r['vaccine_name']) ?></td>
-                                    <td><span class="badge bg-warning text-dark"><?= htmlspecialchars($r['next_dose']) ?></span>
+                                    <td><?= htmlspecialchars($r['vaccine_name'] ?? '') ?></td>
+                                    <td><span
+                                            class="badge bg-warning text-dark"><?= htmlspecialchars($r['next_dose'] ?? '') ?></span>
                                     </td>
                                     <td><?= htmlspecialchars($r['owner_contact_no'] ?? '—') ?></td>
                                 </tr>
-                            <?php endforeach; endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

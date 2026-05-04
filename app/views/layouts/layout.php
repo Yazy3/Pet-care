@@ -433,7 +433,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
             <ul class="sb-nav">
                 <li><a href="?controller=vaccine&action=index" class="nl <?= isActive('vaccine') ?>"
                         onclick="closeSidebar()"><i class="bi bi-shield-fill-plus"></i> Vaccines</a></li>
-                <li><a href="?controller=record&action=schedule" class="nl <?= isActive('record', 'schedule') ?>"
+                <li><a href="?controller=records&action=schedule" class="nl <?= isActive('record', 'schedule') ?>"
                         onclick="closeSidebar()"><i class="bi bi-bell-fill"></i> Due Schedule</a></li>
             </ul>
         </div>
@@ -457,7 +457,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
             </button>
 
             <div class="tb-acts">
-                <a href="?controller=record&action=create" class="btn btn-sm btn-success"><i class="bi bi-plus-lg"></i>
+                <a href="?controller=records&action=create" class="btn btn-sm btn-success"><i class="bi bi-plus-lg"></i>
                     New Record</a>
 
                 <a href="?controller=owner&action=create"

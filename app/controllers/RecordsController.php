@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../models/Records.php';
+require_once __DIR__ . '/../models/records.php';   // ← Updated with 's'
 require_once __DIR__ . '/../models/Pet.php';
 require_once __DIR__ . '/../models/Vaccine.php';
 require_once __DIR__ . '/../models/Staff.php';
@@ -18,6 +18,7 @@ class RecordsController
     public function __construct()
     {
         AuthMiddleware::check();
+
         $this->record = new Record();
         $this->pet = new Pet();
         $this->vaccine = new Vaccine();
@@ -27,13 +28,16 @@ class RecordsController
     public function index()
     {
         $records = $this->record->all();
+        $pageTitle = 'Vaccination Records';
         require __DIR__ . '/../views/admin/records/index.php';
     }
 
     public function schedule()
     {
-        $dueSoon = $this->record->dueSoon(30);
         $overdue = $this->record->overdue();
+        $dueSoon = $this->record->dueSoon(30);
+
+        $pageTitle = 'Vaccination Schedule';
         require __DIR__ . '/../views/admin/records/schedule.php';
     }
 
@@ -42,6 +46,8 @@ class RecordsController
         $pets = $this->pet->allForDropdown();
         $vaccines = $this->vaccine->allForDropdown();
         $staffs = $this->staff->allForDropdown();
+
+        $pageTitle = 'Create New Record';
         require __DIR__ . '/../views/admin/records/create.php';
     }
 
@@ -49,17 +55,17 @@ class RecordsController
     {
         $petId = (int) ($_POST['pet_id'] ?? 0);
         $vaccineId = (int) ($_POST['vaccine_id'] ?? 0);
-        $dateAdminister = trim((string) ($_POST['date_administer'] ?? ''));
+        $dateAdminister = trim($_POST['date_administer'] ?? '');
         $dosage = (int) ($_POST['dosage'] ?? 0);
-        $nextDose = trim((string) ($_POST['next_dose'] ?? ''));
+        $nextDose = trim($_POST['next_dose'] ?? '');
         $staffId = (int) ($_POST['staff_id'] ?? 0);
-        $dateUpdated = date('Y-m-d');
+        $dateUpdated = date('Y-m-d H:i:s');
 
         if ($petId === 0)
             Flash::set('error', 'Please select a pet.');
         if ($vaccineId === 0)
             Flash::set('error', 'Please select a vaccine.');
-        if ($dateAdminister === '')
+        if (empty($dateAdminister))
             Flash::set('error', 'Date administered is required.');
         if ($staffId === 0)
             Flash::set('error', 'Please select a staff member.');
@@ -70,6 +76,7 @@ class RecordsController
         }
 
         $this->record->create($petId, $vaccineId, $dateAdminister, $dosage, $nextDose, $staffId, $dateUpdated);
+
         Flash::set('success', 'Vaccination record saved successfully.');
         header("Location: ?controller=records&action=index");
         exit;
@@ -83,39 +90,43 @@ class RecordsController
             header("Location: ?controller=records&action=index");
             exit;
         }
-        require __DIR__ . '/../views/admin/records/show.php';   // Fixed path
+        $pageTitle = 'Record Details';
+        require __DIR__ . '/../views/admin/records/show.php';
     }
 
     public function edit(int $id)
     {
         $record = $this->record->find($id);
-        $pets = $this->pet->allForDropdown();
-        $vaccines = $this->vaccine->allForDropdown();
-        $staffs = $this->staff->allForDropdown();
-
         if (!$record) {
             Flash::set('error', 'Record not found.');
             header("Location: ?controller=records&action=index");
             exit;
         }
 
-        require __DIR__ . '/../views/admin/records/edit.php';   // Fixed path
+        $pets = $this->pet->allForDropdown();
+        $vaccines = $this->vaccine->allForDropdown();
+        $staffs = $this->staff->allForDropdown();
+
+        $pageTitle = 'Edit Record';
+        require __DIR__ . '/../views/admin/records/edit.php';
     }
 
     public function update(int $id)
     {
         $petId = (int) ($_POST['pet_id'] ?? 0);
         $vaccineId = (int) ($_POST['vaccine_id'] ?? 0);
-        $dateAdminister = trim((string) ($_POST['date_administer'] ?? ''));
+        $dateAdminister = trim($_POST['date_administer'] ?? '');
         $dosage = (int) ($_POST['dosage'] ?? 0);
-        $nextDose = trim((string) ($_POST['next_dose'] ?? ''));
+        $nextDose = trim($_POST['next_dose'] ?? '');
         $staffId = (int) ($_POST['staff_id'] ?? 0);
-        $dateUpdated = date('Y-m-d');
+        $dateUpdated = date('Y-m-d H:i:s');
 
         if ($petId === 0)
             Flash::set('error', 'Please select a pet.');
         if ($vaccineId === 0)
             Flash::set('error', 'Please select a vaccine.');
+        if (empty($dateAdminister))
+            Flash::set('error', 'Date administered is required.');
         if ($staffId === 0)
             Flash::set('error', 'Please select a staff member.');
 
@@ -134,7 +145,7 @@ class RecordsController
     public function delete(int $id)
     {
         $this->record->delete($id);
-        Flash::set('success', 'Record deleted.');
+        Flash::set('success', 'Record deleted successfully.');
         header("Location: ?controller=records&action=index");
         exit;
     }

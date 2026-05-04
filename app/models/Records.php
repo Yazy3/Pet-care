@@ -50,21 +50,26 @@ class Record
         return $stmt->fetch() ?: null;
     }
 
-    public function findByPet(int $petId): array
+    public function overdue(): array
     {
         $stmt = $this->db->prepare("
-            SELECT r.*, v.vaccine_name, v.vaccine_form, s.staff_name
+            SELECT r.*,
+                   p.pet_name, p.pet_species,
+                   CONCAT(o.owner_first_name,' ',o.owner_last_name) AS owner_name,
+                   o.owner_contact_no,
+                   v.vaccine_name
             FROM record_table r
+            LEFT JOIN pet_table     p ON r.pet_id     = p.pet_id
+            LEFT JOIN owner_table   o ON p.owner_id   = o.owner_id
             LEFT JOIN vaccine_table v ON r.vaccine_id = v.vaccine_id
-            LEFT JOIN staff_table   s ON r.staff_id   = s.staff_id
-            WHERE r.pet_id = ?
-            ORDER BY r.date_administer DESC
+            WHERE r.next_dose IS NOT NULL
+              AND r.next_dose < CURDATE()
+            ORDER BY r.next_dose ASC
         ");
-        $stmt->execute([$petId]);
+        $stmt->execute();
         return $stmt->fetchAll() ?? [];
     }
 
-    /** Records whose next_dose date falls within the next $days days */
     public function dueSoon(int $days = 30): array
     {
         $stmt = $this->db->prepare("
@@ -78,30 +83,26 @@ class Record
             LEFT JOIN owner_table   o ON p.owner_id   = o.owner_id
             LEFT JOIN vaccine_table v ON r.vaccine_id = v.vaccine_id
             WHERE r.next_dose IS NOT NULL
-              AND STR_TO_DATE(r.next_dose, '%Y-%m-%d') BETWEEN CURDATE()
+              AND r.next_dose BETWEEN CURDATE() 
                   AND DATE_ADD(CURDATE(), INTERVAL ? DAY)
-            ORDER BY STR_TO_DATE(r.next_dose, '%Y-%m-%d') ASC
+            ORDER BY r.next_dose ASC
         ");
         $stmt->execute([$days]);
         return $stmt->fetchAll() ?? [];
     }
 
-    public function overdue(): array
+    public function findByPet(int $petId): array
     {
-        return $this->db->query("
-            SELECT r.*,
-                   p.pet_name, p.pet_species,
-                   CONCAT(o.owner_first_name,' ',o.owner_last_name) AS owner_name,
-                   o.owner_contact_no,
-                   v.vaccine_name
+        $stmt = $this->db->prepare("
+            SELECT r.*, v.vaccine_name, v.vaccine_form, s.staff_name
             FROM record_table r
-            LEFT JOIN pet_table     p ON r.pet_id     = p.pet_id
-            LEFT JOIN owner_table   o ON p.owner_id   = o.owner_id
             LEFT JOIN vaccine_table v ON r.vaccine_id = v.vaccine_id
-            WHERE r.next_dose IS NOT NULL
-              AND STR_TO_DATE(r.next_dose,'%Y-%m-%d') < CURDATE()
-            ORDER BY STR_TO_DATE(r.next_dose,'%Y-%m-%d') ASC
-        ")->fetchAll() ?? [];
+            LEFT JOIN staff_table   s ON r.staff_id   = s.staff_id
+            WHERE r.pet_id = ?
+            ORDER BY r.date_administer DESC
+        ");
+        $stmt->execute([$petId]);
+        return $stmt->fetchAll() ?? [];
     }
 
     public function recent(int $limit = 8): array
@@ -124,12 +125,12 @@ class Record
     }
 
     public function create(
-        int    $petId,
-        int    $vaccineId,
+        int $petId,
+        int $vaccineId,
         string $dateAdminister,
-        int    $dosage,
+        int $dosage,
         string $nextDose,
-        int    $staffId,
+        int $staffId,
         string $dateUpdated
     ): bool {
         $stmt = $this->db->prepare("
@@ -141,13 +142,13 @@ class Record
     }
 
     public function update(
-        int    $id,
-        int    $petId,
-        int    $vaccineId,
+        int $id,
+        int $petId,
+        int $vaccineId,
         string $dateAdminister,
-        int    $dosage,
+        int $dosage,
         string $nextDose,
-        int    $staffId,
+        int $staffId,
         string $dateUpdated
     ): bool {
         $stmt = $this->db->prepare("
@@ -175,7 +176,7 @@ class Record
         $stmt = $this->db->prepare("
             SELECT COUNT(*) FROM record_table
             WHERE next_dose IS NOT NULL
-              AND STR_TO_DATE(next_dose,'%Y-%m-%d') BETWEEN CURDATE()
+              AND next_dose BETWEEN CURDATE()
                   AND DATE_ADD(CURDATE(), INTERVAL ? DAY)
         ");
         $stmt->execute([$days]);

@@ -18,9 +18,9 @@ require __DIR__ . '/../../layouts/layout.php';
                         <select name="pet_id" class="form-select" required>
                             <option value=""> Select Pet </option>
                             <?php foreach ($pets as $p): ?>
-                            <option value="<?= $p['pet_id'] ?>">
-                                <?= htmlspecialchars($p['label']) ?>
-                            </option>
+                                <option value="<?= $p['pet_id'] ?>">
+                                    <?= htmlspecialchars($p['label']) ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -30,9 +30,9 @@ require __DIR__ . '/../../layouts/layout.php';
                         <select name="vaccine_id" class="form-select" required>
                             <option value=""> Select Vaccine </option>
                             <?php foreach ($vaccines as $v): ?>
-                            <option value="<?= $v['vaccine_id'] ?>">
-                                <?= htmlspecialchars($v['label']) ?>
-                            </option>
+                                <option value="<?= $v['vaccine_id'] ?>">
+                                    <?= htmlspecialchars($v['label']) ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -53,18 +53,18 @@ require __DIR__ . '/../../layouts/layout.php';
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Next Dose Date</label>
                         <input type="date" name="next_dose" class="form-control">
-                        <div class="form-text">Leave blank if no follow-up needed.</div>
+                        <div class="form-text"></div>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Administered By (Staff) <span
                                 class="text-danger">*</span></label>
                         <select name="staff_id" class="form-select" required>
-                            <option value="">— Select Staff —</option>
+                            <option value=""> Select Staff </option>
                             <?php foreach ($staffs as $s): ?>
-                            <option value="<?= $s['staff_id'] ?>">
-                                <?= htmlspecialchars($s['staff_name']) ?>
-                            </option>
+                                <option value="<?= $s['staff_id'] ?>">
+                                    <?= htmlspecialchars($s['staff_name']) ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>

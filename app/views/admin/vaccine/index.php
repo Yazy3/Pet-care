@@ -20,48 +20,48 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
                     </thead>
                     <tbody>
                         <?php if (empty($vaccines)): ?>
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">No vaccines found.</td>
-                        </tr>
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">No vaccines found.</td>
+                            </tr>
                         <?php else:
                             foreach ($vaccines as $v): ?>
-                        <tr>
-                            <td>
-                                <?= $v['vaccine_id'] ?>
-                            </td>
-                            <td class="fw-semibold">
-                                <?= htmlspecialchars($v['vaccine_name']) ?>
-                            </td>
-                            <td>
-                                <span class="badge bg-primary">
-                                    <?= htmlspecialchars($v['vaccine_type'] ?? '—') ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    <?= htmlspecialchars($v['vaccine_form'] ?? '—') ?>
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <a href="?controller=vaccine&action=edit&id=<?= $v['vaccine_id'] ?>"
-                                    class="btn btn-sm btn-outline-warning py-0 me-1">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="?controller=vaccine&action=delete&id=<?= $v['vaccine_id'] ?>"
-                                    class="btn btn-sm btn-outline-danger py-0"
-                                    onclick="return confirm('Delete this vaccine?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach; endif; ?>
+                                <tr>
+                                    <td>
+                                        <?= $v['vaccine_id'] ?>
+                                    </td>
+                                    <td class="fw-semibold">
+                                        <?= htmlspecialchars($v['vaccine_name']) ?>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            <?= htmlspecialchars($v['vaccine_type'] ?? '—') ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            <?= htmlspecialchars($v['vaccine_form'] ?? '—') ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="?controller=vaccine&action=edit&id=<?= $v['vaccine_id'] ?>"
+                                            class="btn btn-sm btn-outline-warning py-0 me-1">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="?controller=vaccine&action=delete&id=<?= $v['vaccine_id'] ?>"
+                                            class="btn btn-sm btn-outline-danger py-0"
+                                            onclick="return confirm('Delete this vaccine?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Quick Add Form -->
+
     <div class="col-12 col-lg-4">
         <div class="form-card">
             <div class="fc-title"><i class="bi bi-plus-circle me-2 text-success"></i>Add Vaccine</div>

@@ -462,7 +462,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
 
                 <a href="?controller=owner&action=create"
                     class="btn btn-sm btn-outline-secondary d-none d-md-inline-flex">
-                    <i class="bi bi-person-plus"></i> Add Owne
+                    <i class="bi bi-person-plus"></i> Add Owner
 
                 </a>
             </div>

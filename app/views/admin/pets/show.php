@@ -44,8 +44,7 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
     <div class="panel">
       <div class="panel-hd">
         <h6><i class="bi bi-clipboard2-pulse-fill me-2 text-success"></i>Vaccination History</h6>
-        <a href="?controller=record&action=create" class="btn btn-sm btn-success"><i class="bi bi-plus-lg"></i>
-          Add Record</a>
+
       </div>
       <div class="table-responsive">
         <table class="table table-hover mb-0 dt-table">

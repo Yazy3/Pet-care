@@ -15,7 +15,7 @@ require __DIR__ . '/../../layouts/layout.php';
                     <div class="col-12">
                         <label class="form-label fw-semibold">Owner <span class="text-danger">*</span></label>
                         <select name="owner_id" class="form-select" required>
-                            <option value="">— Select Owner —</option>
+                            <option value=""> Select Owner </option>
                             <?php foreach ($owners as $o): ?>
                                 <option value="<?= $o['owner_id'] ?>" <?= ($o['owner_id'] == $pet['owner_id']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($o['full_name']) ?>

@@ -28,4 +28,10 @@ class Registration
         $stmt->execute([$username]);
         return $stmt->fetch() ?: null;
     }
+    public function countStaff(): int
+    {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM staff_table");
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
 }

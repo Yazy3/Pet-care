@@ -30,6 +30,14 @@ class Owner
         return $stmt->fetch() ?: null;
     }
 
+    // ✅ NEW - Important for Login
+    public function findByUsername(string $username): ?array
+    {
+        $stmt = $this->db->prepare("SELECT * FROM owner_table WHERE username = ?");
+        $stmt->execute([$username]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function allForDropdown(): array
     {
         return $this->db->query("
@@ -45,17 +53,18 @@ class Owner
         string $lastName,
         string $suffix,
         string $sex,
-        string $contactNo
+        string $contactNo,
+        ?string $username = null,
+        ?string $password = null
     ): int|false {
 
         $stmt = $this->db->prepare("
-        INSERT INTO owner_table 
-            (owner_first_name, owner_last_name, owner_suffix, sex, owner_contact_no)
-        VALUES 
-            (?, ?, ?, ?, ?)
-    ");
+            INSERT INTO owner_table 
+            (owner_first_name, owner_last_name, owner_suffix, sex, owner_contact_no, username, password)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
 
-        $success = $stmt->execute([$firstName, $lastName, $suffix, $sex, $contactNo]);
+        $success = $stmt->execute([$firstName, $lastName, $suffix, $sex, $contactNo, $username, $password]);
 
         if ($success) {
             return (int) $this->db->lastInsertId();
@@ -63,34 +72,46 @@ class Owner
 
         return false;
     }
+
     public function update(
         int $id,
         string $firstName,
         string $lastName,
         string $suffix,
         string $sex,
-        string $contactNo
+        string $contactNo,
+        ?string $username = null,
+        ?string $password = null
     ): bool {
-        $stmt = $this->db->prepare("
-            UPDATE owner_table
-            SET owner_first_name=?, owner_last_name=?, owner_suffix=?,
-                sex=?, owner_contact_no=?
-            WHERE owner_id=?
-        ");
-        return $stmt->execute([$firstName, $lastName, $suffix, $sex, $contactNo, $id]);
+        $sql = "UPDATE owner_table 
+                SET owner_first_name=?, owner_last_name=?, owner_suffix=?, 
+                    sex=?, owner_contact_no=?";
+        $params = [$firstName, $lastName, $suffix, $sex, $contactNo];
+
+        if ($username !== null) {
+            $sql .= ", username = ?";
+            $params[] = $username;
+        }
+        if ($password !== null) {
+            $sql .= ", password = ?";
+            $params[] = $password;
+        }
+
+        $sql .= " WHERE owner_id = ?";
+        $params[] = $id;
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
     }
 
     public function delete(int $id): bool
     {
         try {
-
             $stmt = $this->db->prepare("DELETE FROM pet_table WHERE owner_id = ?");
             $stmt->execute([$id]);
 
-
             $stmt = $this->db->prepare("DELETE FROM owner_table WHERE owner_id = ?");
             return $stmt->execute([$id]);
-
         } catch (PDOException $e) {
             echo "Delete Error: " . $e->getMessage();
             exit;
@@ -101,9 +122,9 @@ class Owner
     {
         return (int) $this->db->query("SELECT COUNT(*) FROM owner_table")->fetchColumn();
     }
+
     public function getLastInsertId(): int
     {
         return (int) $this->db->lastInsertId();
     }
-
 }

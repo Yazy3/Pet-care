@@ -16,7 +16,7 @@ class Staff
     public function all(): array
     {
         return $this->db->query("
-            SELECT staff_id, staff_name, username, role, created_at 
+            SELECT staff_id, staff_name, username,  created_at 
             FROM staff_table 
             ORDER BY staff_id ASC
         ")->fetchAll() ?? [];

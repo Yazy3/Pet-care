@@ -1,6 +1,7 @@
 <?php
+// Redirect if already logged in
 if (isset($_SESSION['user'])) {
-    header("Location: ?controller=owner&action=index");
+    header("Location: ?controller=auth&action=index");
     exit;
 }
 
@@ -14,7 +15,7 @@ ob_start();
             <i class="bi bi-heart-pulse-fill text-white"></i>
         </div>
         <h3>PetCare Clinic</h3>
-        <p>Staff Login — Pet Medical Record & Vaccination Monitoring System</p>
+        <p>Login — Staff & Pet Owners</p>
     </div>
 
     <div class="auth-body">
@@ -58,9 +59,15 @@ ob_start();
             </button>
         </form>
 
-        <p class="auth-link">
-            Don't have an account?
-            <a href="?controller=registration&action=create">Create Staff Account</a>
+        <p class="auth-link mt-3 text-center">
+            Don't have an account?<br>
+            <a href="?controller=registration&action=create" class="text-success fw-semibold">
+                Create New Account
+            </a>
+        </p>
+
+        <p class="text-center small text-muted mt-3">
+            Pet Owners can login here to track their pets
         </p>
     </div>
 </div>
@@ -69,7 +76,6 @@ ob_start();
     function togglePassword(id, btn) {
         const field = document.getElementById(id);
         const icon = btn.querySelector("i");
-
         if (field.type === "password") {
             field.type = "text";
             icon.classList.remove("bi-eye");

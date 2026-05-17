@@ -1,5 +1,4 @@
 <?php
-
 $pageTitle = $pageTitle ?? 'PetCare Clinic';
 ?>
 <!DOCTYPE html>
@@ -16,13 +15,17 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.1/css/responsive.bootstrap5.min.css">
+
     <style>
     :root {
         --sw: 240px;
-        --sbg: #0b1f35;
-        --sacc: #1a7a4a;
-        --stxt: #94a3b8;
+        --sbg: #134E5E;
+        --sacc: #63BFBF;
+        --stxt: #A7E0E0;
         --th: 58px;
+        --acc-dark: #3a9f9f;
+        --page-bg: #F7FFFE;
+        --border: #D8F4F2;
     }
 
     *,
@@ -33,7 +36,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
 
     body {
         margin: 0;
-        background: #f1f5f9;
+        background: var(--page-bg);
         font-family: 'Segoe UI', system-ui, sans-serif;
         font-size: 14px;
         color: #1e293b;
@@ -202,7 +205,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
     #topbar {
         height: var(--th);
         background: #fff;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
         padding: 0 24px;
@@ -228,6 +231,18 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
 
     #sbtog {
         display: none;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #134E5E;
+        font-size: 22px;
+        flex-shrink: 0;
+        transition: background .14s;
     }
 
 
@@ -240,7 +255,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
     .stat-c {
         background: #fff;
         border-radius: 12px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--border);
         padding: 20px;
         display: flex;
         align-items: center;
@@ -274,13 +289,13 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
     .panel {
         background: #fff;
         border-radius: 12px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--border);
         overflow: hidden;
     }
 
     .panel-hd {
         padding: 15px 20px;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -300,7 +315,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
     .form-card {
         background: #fff;
         border-radius: 12px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--border);
         padding: 28px;
     }
 
@@ -309,23 +324,23 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
         font-weight: 600;
         margin-bottom: 20px;
         padding-bottom: 14px;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid var(--border);
     }
 
 
     .badge-dog {
-        background: #dbeafe;
-        color: #1d4ed8;
+        background: #D8F4F2;
+        color: #134E5E;
     }
 
     .badge-cat {
-        background: #fce7f3;
-        color: #9d174d;
+        background: #A7E0E0;
+        color: #134E5E;
     }
 
     .badge-bird {
-        background: #dcfce7;
-        color: #166534;
+        background: #D8F4F2;
+        color: #134E5E;
     }
 
     .badge-rabbit {
@@ -339,8 +354,8 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
     }
 
     .badge-active {
-        background: #dcfce7;
-        color: #166534;
+        background: #D8F4F2;
+        color: #134E5E;
     }
 
     .badge-inactive {
@@ -389,6 +404,31 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
             display: inline-flex;
         }
     }
+    /* Bootstrap overrides — teal theme */
+    .btn-success {
+        background-color: #63BFBF !important;
+        border-color: #63BFBF !important;
+        color: #fff !important;
+    }
+    .btn-success:hover {
+        background-color: #3a9f9f !important;
+        border-color: #3a9f9f !important;
+    }
+    .btn-outline-success {
+        border-color: #63BFBF !important;
+        color: #134E5E !important;
+    }
+    .btn-outline-success:hover {
+        background-color: #D8F4F2 !important;
+    }
+    .alert-success {
+        background-color: #D8F4F2 !important;
+        border-color: #A7E0E0 !important;
+        color: #134E5E !important;
+    }
+    .text-success { color: #134E5E !important; }
+    .bg-success { background-color: #63BFBF !important; }
+    .table-light { background-color: #F7FFFE !important; }
     </style>
 </head>
 
@@ -410,7 +450,8 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
 
     <nav id="sb">
 
-        <a href="?controller=dashboard&action=index" class="sb-brand">
+    <!-- Sidebar Brand -->
+        <a href="?controller=home&action=index" class="sb-brand">
             <div class="sb-ico"><i class="bi bi-heart-pulse-fill"></i></div>
             <div>
                 <div class="sb-name">PetCare</div>
@@ -419,13 +460,21 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
         </a>
 
         <div class="sb-sec">
+            <div class="sb-lbl">Main</div>
+            <ul class="sb-nav">
+                <li><a href="?controller=home&action=index" class="nl <?= isActive('home') ?>" onclick="closeSidebar()"><i
+                class="bi bi-house-fill"></i> Home</a></li>
+            </ul>
+        </div>
+
+        <div class="sb-sec">
             <div class="sb-lbl">Records</div>
             <ul class="sb-nav">
                 <li><a href="?controller=owner&action=index" class="nl <?= isActive('owner') ?>"
                         onclick="closeSidebar()"><i class="bi bi-people-fill"></i> Owners</a></li>
                 <li><a href="?controller=pet&action=index" class="nl <?= isActive('pet') ?>" onclick="closeSidebar()"><i
                             class="bi bi-paw-fill"></i> Pets</a></li>
-                <li><a href="?controller=records&action=index" class="nl <?= isActive('record') ?>"
+                <li><a href="?controller=records&action=index" class="nl <?= isActive('records', 'index') ?>"
                         onclick="closeSidebar()"><i class="bi bi-clipboard2-pulse-fill"></i> Vacc. Records</a></li>
             </ul>
         </div>
@@ -435,7 +484,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
             <ul class="sb-nav">
                 <li><a href="?controller=vaccine&action=index" class="nl <?= isActive('vaccine') ?>"
                         onclick="closeSidebar()"><i class="bi bi-shield-fill-plus"></i> Vaccines</a></li>
-                <li><a href="?controller=records&action=schedule" class="nl <?= isActive('record', 'schedule') ?>"
+                <li><a href="?controller=records&action=schedule" class="nl <?= isActive('records', 'schedule') ?>"
                         onclick="closeSidebar()"><i class="bi bi-bell-fill"></i> Due Schedule</a></li>
             </ul>
         </div>
@@ -458,20 +507,12 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
 
     <div id="main">
         <div id="topbar">
-            <button id="sbtog" class="btn btn-sm btn-outline-secondary" onclick="toggleSidebar()">
+            <button onclick="toggleSidebar()" id="sbtog"
+               onmouseover="this.style.background='#D8F4F2'"
+               onmouseout="this.style.background='none'"
+               aria-label="Toggle menu">
                 <i class="bi bi-list"></i>
             </button>
-
-            <div class="tb-acts">
-                <a href="?controller=records&action=create" class="btn btn-sm btn-success"><i class="bi bi-plus-lg"></i>
-                    New Record</a>
-
-                <a href="?controller=owner&action=create"
-                    class="btn btn-sm btn-outline-secondary d-none d-md-inline-flex">
-                    <i class="bi bi-person-plus"></i> Add Owner
-
-                </a>
-            </div>
         </div>
 
         <div class="pg">
@@ -484,7 +525,7 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
                 </div>
                 <?php endforeach;
                     unset($_SESSION['flash']['success']); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <button type="button" class="btn-close" onclick="this.closest('.alert').remove()"></button>
             </div>
             <?php endif; ?>
 
@@ -496,6 +537,6 @@ $pageTitle = $pageTitle ?? 'PetCare Clinic';
                 </div>
                 <?php endforeach;
                     unset($_SESSION['flash']['error']); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <button type="button" class="btn-close" onclick="this.closest('.alert').remove()"></button>
             </div>
             <?php endif; ?>

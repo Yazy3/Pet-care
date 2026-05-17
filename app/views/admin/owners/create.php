@@ -13,8 +13,8 @@ require __DIR__ . '/../../layouts/layout.php';
                 <form method="POST" action="?controller=owner&action=storeWithPet">
 
 
-                    <h5 class="mb-4 text-primary fw-semibold">
-                        <i class="bi bi-person-badge-fill me-2"></i>Owner Information
+                    <h5 class="mb-4 text-success fw-semibold">
+                        <i class="bi bi-person-badge-fill me-2 text-success"></i>Owner Information
                     </h5>
 
                     <div class="row g-3">

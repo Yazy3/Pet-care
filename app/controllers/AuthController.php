@@ -49,7 +49,7 @@ class AuthController
                 'role' => 'staff',
             ];
             Flash::set('success', 'Welcome back, ' . $staff['staff_name'] . '!');
-            header("Location: ?controller=staff&action=index");
+            header("Location: ?controller=home&action=index");
             exit;
         }
 
@@ -76,7 +76,7 @@ class AuthController
         if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'owner') {
             header("Location: ?controller=ownerdashboard&action=index");
         } else {
-            header("Location: ?controller=staff&action=index");   // Staff goes to StaffController
+            header("Location: ?controller=home&action=index");   // Staff goes to Dashboard
         }
         exit;
     }

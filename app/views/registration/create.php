@@ -23,9 +23,9 @@ ob_start();
         <?php endforeach; ?>
 
         <div class="d-flex justify-content-center mb-4 gap-2">
-            <button onclick="showForm('staff')" class="btn btn-outline-primary active" id="staff-btn">Staff
+            <button onclick="showForm('staff')" class="btn btn-outline-secondary" id="staff-btn">Staff
                 Registration</button>
-            <button onclick="showForm('owner')" class="btn btn-outline-primary" id="owner-btn">Pet Owner
+            <button onclick="showForm('owner')" class="btn btn-outline-success" id="owner-btn">Pet Owner
                 Registration</button>
         </div>
 
@@ -88,7 +88,7 @@ ob_start();
         </form>
 
         <p class="auth-link mt-4 text-center">
-            Already have an account? <a href="?controller=auth&action=index">Sign in here</a>
+            Already have an account? <a href="?controller=auth&action=index" class="text-success fw-semibold">Sign in here</a>
         </p>
     </div>
 </div>

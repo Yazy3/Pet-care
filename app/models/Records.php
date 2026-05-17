@@ -107,7 +107,8 @@ class Record
 
     public function recent(int $limit = 8): array
     {
-        $stmt = $this->db->prepare("
+        $limit = (int) $limit;
+        $stmt = $this->db->query("
             SELECT r.*,
                    p.pet_name, p.pet_species,
                    CONCAT(o.owner_first_name,' ',o.owner_last_name) AS owner_name,
@@ -118,9 +119,8 @@ class Record
             LEFT JOIN vaccine_table v ON r.vaccine_id = v.vaccine_id
             LEFT JOIN staff_table   s ON r.staff_id   = s.staff_id
             ORDER BY r.date_administer DESC
-            LIMIT ?
+            LIMIT {$limit}
         ");
-        $stmt->execute([$limit]);
         return $stmt->fetchAll() ?? [];
     }
 
@@ -182,4 +182,23 @@ class Record
         $stmt->execute([$days]);
         return (int) $stmt->fetchColumn();
     }
+
+    public function findByOwner(int $ownerId): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT r.*,
+                   p.pet_name, p.pet_species, p.pet_breed,
+                   v.vaccine_name, v.vaccine_form, v.vaccine_type,
+                   s.staff_name
+            FROM record_table r
+            LEFT JOIN pet_table     p ON r.pet_id     = p.pet_id
+            LEFT JOIN vaccine_table v ON r.vaccine_id = v.vaccine_id
+            LEFT JOIN staff_table   s ON r.staff_id   = s.staff_id
+            WHERE p.owner_id = ?
+            ORDER BY r.date_administer DESC
+        ");
+        $stmt->execute([$ownerId]);
+        return $stmt->fetchAll() ?? [];
+    }
+
 }

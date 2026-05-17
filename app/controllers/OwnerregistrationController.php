@@ -5,7 +5,7 @@ require_once __DIR__ . '/../models/Owner.php';
 require_once __DIR__ . '/../core/Flash.php';
 require_once __DIR__ . '/../core/Session.php';
 
-class OwnerRegistrationController
+class OwnerregistrationController
 {
     private Owner $owner;
 

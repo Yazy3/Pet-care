@@ -63,21 +63,54 @@ class OwnerregistrationController
         }
 
         if ($this->owner->findByUsername($username)) {
-            Flash::set('error', 'Username is already taken.');
+            Flash::set('error', 'Username is already taken. Please choose another one.');
             header("Location: ?controller=registration&action=create");
             exit;
         }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $result = $this->owner->create($firstName, $lastName, $suffix, $sex, $contactNo, $username, $hashedPassword);
+        $existingOwner = $this->owner->findByContact($contactNo);
+
+        if ($existingOwner) {
+            $result = $this->owner->update(
+                $existingOwner['owner_id'],
+                $firstName,
+                $lastName,
+                $suffix,
+                $sex,
+                $contactNo,
+                $username,
+                $hashedPassword
+            );
+            $ownerId = $existingOwner['owner_id'];
+            $message = 'Account successfully linked to existing profile!';
+        } else {
+            $result = $this->owner->create(
+                $firstName,
+                $lastName,
+                $suffix,
+                $sex,
+                $contactNo,
+                $username,
+                $hashedPassword
+            );
+            $ownerId = $result;
+            $message = 'Pet Owner account created successfully!';
+        }
 
         if ($result !== false) {
-            Flash::set('success', 'Pet Owner account created successfully!');
-            header("Location: ?controller=auth&action=index");
+            $_SESSION['user'] = [
+                'owner_id' => $ownerId,
+                'username' => $username,
+                'role' => 'owner'
+            ];
+
+            Flash::set('success', $message);
+            header("Location: ?controller=ownerdashboard&action=index");
             exit;
         } else {
-            Flash::set('error', 'Failed to create account. Please try again.');
+            Flash::set('error', 'Failed to create/link account. Please try again.');
             header("Location: ?controller=registration&action=create");
             exit;
         }

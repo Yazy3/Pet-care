@@ -57,17 +57,24 @@ class RegistrationController
             exit;
         }
 
+        // ✅ Prevent duplicate username
         if ($this->registration->findByUsername($username)) {
-            Flash::set('error', 'Username is already taken.');
+            Flash::set('error', 'Username is already taken. Please choose another one.');
             header("Location: ?controller=registration&action=create");
             exit;
         }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $this->registration->create($staffName, $username, $hashedPassword);
+        $result = $this->registration->create($staffName, $username, $hashedPassword);
 
-        Flash::set('success', 'Staff account created successfully!');
-        header("Location: ?controller=auth&action=index");
-        exit;
+        if ($result) {
+            Flash::set('success', 'Staff account created successfully!');
+            header("Location: ?controller=auth&action=index");
+            exit;
+        } else {
+            Flash::set('error', 'Failed to create staff account. Please try again.');
+            header("Location: ?controller=registration&action=create");
+            exit;
+        }
     }
 }

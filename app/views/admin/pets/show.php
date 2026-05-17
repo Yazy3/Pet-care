@@ -5,7 +5,7 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
   <div class="col-12 col-md-4">
     <div class="panel panel-bd">
       <div class="text-center mb-3">
-        <?php $icon = ['dog' => '🐶', 'cat' => '🐱', 'bird' => '🐦', 'rabbit' => '🐰', 'other' => '🐾'][$pet['pet_species']] ?? '🐾'; ?>
+        <?php $icon = ['dog' => '🐶', 'cat' => '🐱'][$pet['pet_species']] ?? '🐾'; ?>
         <div style="font-size:52px;"><?= $icon ?></div>
         <h5 class="fw-bold mb-0"><?= htmlspecialchars($pet['pet_name']) ?></h5>
         <span class="badge badge-<?= $pet['pet_species'] ?>"><?= htmlspecialchars($pet['pet_species']) ?></span>
@@ -77,10 +77,7 @@ require __DIR__ . '/../../layouts/layout.php'; ?>
                     <?php else: ?>—<?php endif; ?>
                   </td>
                   <td><?= htmlspecialchars($r['staff_name']) ?></td>
-                  <td>
-                    <a href="?controller=record&action=show&id=<?= $r['record_id'] ?>"
-                      class="btn btn-sm btn-outline-info py-0"><i class="bi bi-eye"></i></a>
-                  </td>
+
                 </tr>
               <?php endforeach; endif; ?>
           </tbody>

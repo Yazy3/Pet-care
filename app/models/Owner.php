@@ -30,12 +30,18 @@ class Owner
         return $stmt->fetch() ?: null;
     }
 
-    // ✅ NEW - Important for Login
     public function findByUsername(string $username): ?array
     {
         $stmt = $this->db->prepare("SELECT * FROM owner_table WHERE username = ?");
         $stmt->execute([$username]);
-        return $stmt->fetch() ?: null;
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
+    public function findByContact(string $contactNo): ?array
+    {
+        $stmt = $this->db->prepare("SELECT * FROM owner_table WHERE owner_contact_no = ?");
+        $stmt->execute([$contactNo]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function allForDropdown(): array
@@ -46,6 +52,17 @@ class Owner
             FROM owner_table
             ORDER BY owner_first_name ASC
         ")->fetchAll() ?? [];
+    }
+
+    public function count(): int
+    {
+        return (int) $this->db->query("SELECT COUNT(*) FROM owner_table")->fetchColumn();
+    }
+
+    // ✅ Needed when adding owner + pet
+    public function getLastInsertId(): int
+    {
+        return (int) $this->db->lastInsertId();
     }
 
     public function create(
@@ -69,7 +86,6 @@ class Owner
         if ($success) {
             return (int) $this->db->lastInsertId();
         }
-
         return false;
     }
 
@@ -116,15 +132,5 @@ class Owner
             echo "Delete Error: " . $e->getMessage();
             exit;
         }
-    }
-
-    public function count(): int
-    {
-        return (int) $this->db->query("SELECT COUNT(*) FROM owner_table")->fetchColumn();
-    }
-
-    public function getLastInsertId(): int
-    {
-        return (int) $this->db->lastInsertId();
     }
 }

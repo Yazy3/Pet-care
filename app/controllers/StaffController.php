@@ -40,10 +40,42 @@ class StaffController
             exit;
         }
 
-        $this->staff->create($staffName, $username, $password);
-        Flash::set('success', 'New staff member added successfully.');
-        header("Location: ?controller=staff&action=index");
-        exit;
+        // Validation
+        if (preg_match('/\d/', $staffName)) {
+            Flash::set('error', 'Staff name cannot contain numbers.');
+            header("Location: ?controller=staff&action=create");
+            exit;
+        }
+        if (preg_match('/\d/', $username)) {
+            Flash::set('error', 'Username cannot contain numbers.');
+            header("Location: ?controller=staff&action=create");
+            exit;
+        }
+        if (strlen($password) < 6) {
+            Flash::set('error', 'Password must be at least 6 characters.');
+            header("Location: ?controller=staff&action=create");
+            exit;
+        }
+
+        // ✅ Prevent duplicate username
+        if ($this->staff->findByUsername($username)) {
+            Flash::set('error', 'Username is already taken. Please choose another one.');
+            header("Location: ?controller=staff&action=create");
+            exit;
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $result = $this->staff->create($staffName, $username, $hashedPassword);
+
+        if ($result) {
+            Flash::set('success', 'New staff member added successfully.');
+            header("Location: ?controller=staff&action=index");
+            exit;
+        } else {
+            Flash::set('error', 'Failed to create staff member. Please try again.');
+            header("Location: ?controller=staff&action=create");
+            exit;
+        }
     }
 
     public function edit(int $id)

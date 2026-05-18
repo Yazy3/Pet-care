@@ -54,13 +54,20 @@ class AuthController
         }
 
         // Owner Login
+
         $owner = $this->owner->findByUsername($username);
         if ($owner && password_verify($password, $owner['password'] ?? '')) {
-            $_SESSION['user'] = [
-                'id' => $owner['owner_id'],
+
+            $userData = [
+                'owner_id' => $owner['owner_id'],
+                'username' => $username,
                 'name' => trim($owner['owner_first_name'] . ' ' . ($owner['owner_last_name'] ?? '')),
-                'role' => 'owner',
+                'role' => 'owner'
             ];
+
+            Session::start();
+            Session::set('user', $userData);
+
             Flash::set('success', 'Welcome, ' . $owner['owner_first_name'] . '!');
             header("Location: ?controller=ownerdashboard&action=index");
             exit;
@@ -70,13 +77,12 @@ class AuthController
         header("Location: ?controller=auth&action=index");
         exit;
     }
-
     private function redirectByRole()
     {
         if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'owner') {
             header("Location: ?controller=ownerdashboard&action=index");
         } else {
-            header("Location: ?controller=home&action=index");   // Staff goes to Dashboard
+            header("Location: ?controller=home&action=index");
         }
         exit;
     }

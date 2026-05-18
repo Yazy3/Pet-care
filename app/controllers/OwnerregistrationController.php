@@ -18,7 +18,7 @@ class OwnerregistrationController
     public function create()
     {
         if (isset($_SESSION['user'])) {
-            header("Location: ?controller=auth&action=index");
+            header("Location: ?controller=ownerdashboard&action=index");
             exit;
         }
         require __DIR__ . '/../views/registration/create.php';
@@ -57,7 +57,9 @@ class OwnerregistrationController
             $errors[] = 'Password must be at least 6 characters.';
 
         if (!empty($errors)) {
-            Flash::set('error', $errors);
+            foreach ($errors as $error) {
+                Flash::set('error', $error);
+            }
             header("Location: ?controller=registration&action=create");
             exit;
         }
@@ -100,15 +102,19 @@ class OwnerregistrationController
         }
 
         if ($result !== false) {
-            $_SESSION['user'] = [
+            $userData = [
                 'owner_id' => $ownerId,
                 'username' => $username,
                 'role' => 'owner'
             ];
 
+            Session::start();                    // ← Important
+            Session::set('user', $userData);     // ← Use Session class
+
             Flash::set('success', $message);
             header("Location: ?controller=ownerdashboard&action=index");
             exit;
+
         } else {
             Flash::set('error', 'Failed to create/link account. Please try again.');
             header("Location: ?controller=registration&action=create");
